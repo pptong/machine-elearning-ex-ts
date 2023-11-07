@@ -1,33 +1,22 @@
-# machine-elearning-typescript
+### 前言
+最近正在学习吴恩达的《机器学习》课程，针对练习部分网上发现两个版本，分别是Octave和Python两个版本的。由于本人对这两种语言也对没什么基础，最近接触得比较多的也就是TypeScript了，所以就打算用它来进行练习吧。
 
-This template should help get you started developing with Vue 3 in Vite.
+### 环境
+本人环境用的是Node版本是v20.0.0，因为考虑到练习中需要呈现一些图标因此使用Vue3来进行呈现。具体编译环境和开发环境的搭建就不说了。除了准备好环境外还需要安装必须用到的依赖：
 
-## Recommended IDE Setup
+```sh
+npm install @tensorflow/tfjs //包含标量、向量、矩阵计算库
+npm install seedrandom //tensorflow 需要用到这个库
+npm install echarts //显示各类图标使用
+```
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+### 安装依赖
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动
 
 ```sh
 npm run dev
@@ -38,3 +27,9 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+### 完成进度
+
+ex1 - 已完成
+ex2 - 进行中

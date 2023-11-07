@@ -66,7 +66,7 @@ export default defineComponent({
     }
 
 
-    const showLearningCurveByEveryAlpha = async () => {
+    const showLearningCurveByEveryAlpha =()=> {
       var myCharts = new MyCharts('learningCurveByEveryAlphaContainer', 0, 2000, 0, 0.5);
       let alpha = [0.001, 0.003, 0.1, 0.3]
       let thInit = tf.tensor([[0], [0], [0]]);

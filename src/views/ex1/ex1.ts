@@ -14,28 +14,29 @@ export function J(feature: tf.Tensor<tf.Rank>, theta: tf.Tensor<tf.Rank>) {
   return sumData.div(2).div(feature.shape[0]).dataSync();
 }
 
+
+
 // θj梯度函数
 export function T(
-  thetaJ: number,
   feature: tf.Tensor<tf.Rank>,
   theta: tf.Tensor<tf.Rank>,
   alpha: number
 ) {
 
+
+
   //特征矩阵补1
   const one = tf.ones([feature.shape[0], 1]);
   const featureData = tf.concat([one, feature], 1);
-  //get Θj
-  const cTheta = tf.split(theta, theta.shape[0], 0)[thetaJ];
+
   //θ:=[[Θ0],[Θ1],[Θ2],...,[-1]]
   const ones = tf.fill([1, 1], -1);
   const onesTheta = theta.concat(ones);
-  //Xi
-  const xi = tf.split(featureData, featureData.shape[1] || 1, 1)[thetaJ];
   // sumValue = Σ ( X * θ * xi )
-  const sumValue = featureData.matMul(onesTheta).mul(xi).sum();
+  const X = featureData.slice([0, 0], [featureData.shape[0], (featureData.shape[1] || 1) - 1]);
+  const sumValue = featureData.matMul(onesTheta).mul(X).sum(0, true).transpose();
   // return = Θj - ( sumValue * α / m )
-  const data = cTheta.sub(sumValue.mul(alpha).div(featureData.shape[0]));
+  const data = theta.sub(sumValue.mul(alpha).div(featureData.shape[0]));
 
   return data;
 }
@@ -52,19 +53,16 @@ export function H(feature: tf.Tensor<tf.Rank>, theta: tf.Tensor<tf.Rank>) {
 export function learningCurve(
   feature: tf.Tensor<tf.Rank>,
   alpha: number,
-  theta:tf.Tensor<tf.Rank>,
+  theta: tf.Tensor<tf.Rank>,
   iterations: number
 ) {
+  console.log(alpha);
 
   const elearningData: Array<any> = [];
   let i = 0;
   for (let i = 0; i < iterations; i++) {
-    var newTheta = [];
-    for (let j = 0; j < theta.shape[0]; j++) {
-      newTheta.push(T(j, feature, theta, alpha));
-    }
+    theta = T(feature, theta, alpha);
     elearningData.push({ x: i, value: J(feature, theta) });
-    theta = tf.concat(newTheta, 0);
   }
   return elearningData;
 }
@@ -73,17 +71,13 @@ export function learningCurve(
 export function computeCost(
   feature: tf.Tensor<tf.Rank>,
   alpha: number,
-  theta:tf.Tensor<tf.Rank>,
+  theta: tf.Tensor<tf.Rank>,
   iterations: number
 ) {
 
   let i = 0;
   for (let i = 0; i < iterations; i++) {
-    var newTheta = [];
-    for (let j = 0; j < theta.shape[0]; j++) {
-      newTheta.push(T(j, feature, theta, alpha));
-    }
-    theta = tf.concat(newTheta, 0);
+    theta = T(feature, theta, alpha)
   }
 
   return theta;
