@@ -22,22 +22,13 @@ export function T(
   theta: tf.Tensor<tf.Rank>,
   alpha: number
 ) {
-
-
-
-  //特征矩阵补1
   const one = tf.ones([feature.shape[0], 1]);
   const featureData = tf.concat([one, feature], 1);
-
-  //θ:=[[Θ0],[Θ1],[Θ2],...,[-1]]
   const ones = tf.fill([1, 1], -1);
   const onesTheta = theta.concat(ones);
-  // sumValue = Σ ( X * θ * xi )
   const X = featureData.slice([0, 0], [featureData.shape[0], (featureData.shape[1] || 1) - 1]);
   const sumValue = featureData.matMul(onesTheta).mul(X).sum(0, true).transpose();
-  // return = Θj - ( sumValue * α / m )
   const data = theta.sub(sumValue.mul(alpha).div(featureData.shape[0]));
-
   return data;
 }
 
@@ -45,7 +36,7 @@ export function T(
 export function H(feature: tf.Tensor<tf.Rank>, theta: tf.Tensor<tf.Rank>) {
   const ones = tf.ones([feature.shape[0], 1]);
   const data = tf.concat([ones, feature], 1);
-  const hData = data.matMul(theta).sum();
+  const hData = data.matMul(theta);
   return hData.dataSync();
 }
 
@@ -61,8 +52,8 @@ export function learningCurve(
   const elearningData: Array<any> = [];
   let i = 0;
   for (let i = 0; i < iterations; i++) {
-    theta = T(feature, theta, alpha);
     elearningData.push({ x: i, value: J(feature, theta) });
+    theta = T(feature, theta, alpha);
   }
   return elearningData;
 }

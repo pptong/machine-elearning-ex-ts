@@ -3,8 +3,8 @@
 
 <template>
   <main>
-    <a href="/ex1">ex1 (done)</a>
-    <div>ex2 (doing)</div>
+    <div><a href="/ex1">ex1 (done)</a></div>
+    <div><a href="/ex2">ex2 (doing)</a></div>
 
   </main>
 </template>
