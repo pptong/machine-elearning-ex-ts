@@ -5,6 +5,11 @@ import * as tf from "@tensorflow/tfjs";
 
 class ex2Controller {
 
+  async data1_showData(ctx: Context)
+  {
+    const data = ReadData("./data/ex2data/ex2data1.txt");
+    ctx.body = data;
+  }
 
   async data1_costValue(ctx: Context) {
     const _ex2Service = new ex2Service();
@@ -14,7 +19,6 @@ class ex2Controller {
     const feature = featureData.slice([0, 0], [featureData.shape[0], (featureData.shape[1] || 1) - 1]);
     const y = featureData.slice([0, (featureData.shape[1] || 1) - 1], [featureData.shape[0], 1]);
     const cost = await _ex2Service.Cost(feature, theta, y);
-    console.log(cost)
     ctx.body = cost;
   }
 
@@ -31,4 +35,6 @@ class ex2Controller {
     ctx.body = theta.dataSync();
   }
 }
+
+
 export default new ex2Controller();

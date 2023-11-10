@@ -14,7 +14,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import { onMounted, onUnmounted } from "vue";
 import * as tf from "@tensorflow/tfjs";
 import MyCharts from '@/utils/myEcharts'
-import { J, H, computeCost } from './ex2'
+import Get from '@/utils/get'
 
 
 export default defineComponent({
@@ -29,40 +29,28 @@ export default defineComponent({
 
     const showScatter = () => {
       var myCharts = new MyCharts('scatterContainer', 20, 100, 20, 100);
-      myCharts.writeScatter(data1.filter(x => x[2] == 1).map(x => [x[0], x[1]]));
-      myCharts.writeScatter(data1.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
+      let data = Get('ex2/data1_showData')
+      const dataJson: Array<Array<number>> = JSON.parse(data);
+
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 1).map(x => [x[0], x[1]]));
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
     }
 
     const showCost = () => {
-      const theta = tf.zeros([3, 1]);
-      const featureData = tf.tensor(data1);
-      const feature = featureData.slice([0, 0], [featureData.shape[0], (featureData.shape[1] || 1) - 1]);
-      const y = featureData.slice([0, (featureData.shape[1] || 1) - 1], [featureData.shape[0], 1]);
-      const cost = J(feature, theta, y);
-      output.cost = Number(cost);
+      let data = Get('ex2/data1_costValue')
+      output.cost = JSON.parse(data)[0]
     }
 
 
     const showScatterAndLine = () => {
-
-      // 显示点阵
-      var myCharts = new MyCharts('scatterAndLineContainer', 0, 100, 0, 100);
-      myCharts.writeScatter(data1.filter(x => x[2] == 1).map(x => [x[0], x[1]]));
-      myCharts.writeScatter(data1.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
-      // 显示边界
-      const thInit = tf.zeros([3, 1]);
-      const featureData = tf.tensor(data1);
-      const feature = featureData.slice([0, 0], [featureData.shape[0], (featureData.shape[1] || 1) - 1]);
-      const y = featureData.slice([0, (featureData.shape[1] || 1) - 1], [featureData.shape[0], 1]);
-      let theta = computeCost(feature, 0.01, thInit, y, 200000);
-
-      // θ0+θ1x1+θ2x2=0 
-      // => x1= -θ0/θ1 |x2 = 0
-      // => x2= -θ0/θ2 |x1 = 0
-      theta.print()
-      alert(-1 * theta.dataSync()[0] / theta.dataSync()[1])
-      alert(-1 * theta.dataSync()[0] / theta.dataSync()[2])
-      myCharts.writeLine(-1 * theta.dataSync()[0] / theta.dataSync()[1], 0, 0, -1 * theta.dataSync()[0] / theta.dataSync()[2])
+      var myCharts = new MyCharts('scatterAndLineContainer', 0, 130, 0, 130);
+      let data = Get('ex2/data1_showData')
+      const dataJson: Array<Array<number>> = JSON.parse(data);
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 1).map(x => [x[0], x[1]]));
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
+      let thetaData  = Get('ex2/data1_gradientDescent')
+      let theta  =JSON.parse(thetaData);
+      myCharts.writeLine(-1 * theta[0] / theta[1], 0, 0, -1 * theta[0] / theta[2])
     }
 
 
