@@ -34,21 +34,25 @@ export default defineComponent({
     // 显示θ=[0,0]的时候误差值
     const showRange = () => {
       let data = Get('ex1/data1_showCost')
-      output.rang = Number(data);
+      output.rang = Number(JSON.parse(data)[0]);
     }
 
     // 显示数据点阵图
     const showScatter = () => {
       let data = Get('ex1/data1_showData')
       var myCharts = new MyCharts('scatterContainer', 0, 30, -6, 30);
-      myCharts.writeScatter(data);
+      myCharts.writeScatter(JSON.parse(data));
     }
 
     // 显示点阵图和估值图
     const showScatterAndLine = () => {
-      let data = Get('ex1/data1_showScatterAndLine')
-      var myCharts = new MyCharts('showScatterAndLineContainer', 0, 30, -6, 30);
-      myCharts.writeLine(0, data[0], 26, Number(data[0]) + 26 * Number(data[0]))
+      var myCharts = new MyCharts('scatterAndLineContainer', 0, 30, -6, 30);
+      let data = Get('ex1/data1_showData')
+      myCharts.writeScatter(JSON.parse(data));
+      let theta = Get('ex1/data1_showScatterAndLine')
+      const thetaData = JSON.parse(theta)
+      myCharts.writeLine(0, Number(thetaData[0]), 26, Number(thetaData[0]) + 26 * Number(thetaData[1]))
+
     }
 
 
@@ -57,6 +61,7 @@ export default defineComponent({
       let data = Get('ex1/data1_showLearningCurve')
       var myCharts = new MyCharts('learningCurveContainer', 0, 30, 4, 7);
       const curveData = JSON.parse(data)
+      console.log(curveData)
       myCharts.writeCustomLine(curveData);
     }
 

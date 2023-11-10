@@ -55,7 +55,7 @@ export default class ex1Service {
     const elearningData: Array<any> = [];
     let i = 0;
     for (let i = 0; i < iterations; i++) {
-      elearningData.push({ x: i, value: await this.Cost(feature, theta) });
+      elearningData.push({ x: i, value: (await this.Cost(feature, theta))[0] });
       theta = await this.Gradient(feature, theta, alpha);
     }
     return elearningData;

@@ -13,7 +13,6 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { onMounted, onUnmounted } from "vue";
 import * as tf from "@tensorflow/tfjs";
-import { ReadData } from '@/utils/readData'
 import MyCharts from '@/utils/myEcharts'
 import { J, H, computeCost } from './ex2'
 
@@ -67,11 +66,7 @@ export default defineComponent({
     }
 
 
-    onMounted(() => {
-      data1 = ReadData('ex2data/ex2data1.txt');
-      data2 = ReadData('ex2data/ex2data2.txt');
 
-    });
 
     return {
       showScatter, showCost, output, showScatterAndLine

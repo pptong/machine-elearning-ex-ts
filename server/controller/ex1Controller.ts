@@ -5,9 +5,9 @@ import ex1Service from "../service/ex1Service";
 
 class ex1Controller {
   async data1_showData(ctx: Context) {
-    const _ex1Service = new ex1Service();
     const data = ReadData("./data/ex1data/ex1data1.txt");
     ctx.body = data;
+
   }
 
   // 显示θ=[0,0]的时候误差值
@@ -16,7 +16,8 @@ class ex1Controller {
     const data = ReadData("./data/ex1data/ex1data1.txt");
     const feature = tf.tensor(data);
     const initTheta = tf.tensor([[0], [0]]);
-    const cost = _ex1Service.Cost(feature, initTheta);
+    const cost = await _ex1Service.Cost(feature, initTheta);
+
     ctx.body = cost;
   }
 
@@ -26,8 +27,8 @@ class ex1Controller {
     const data = ReadData("./data/ex1data/ex1data1.txt");
     let feature = tf.tensor(data);
     let thInit = tf.tensor([[0], [0]]);
-    let theta = _ex1Service.GradientDescent(feature, 0.01, thInit, 1000);
-    ctx.body = theta;
+    let theta =await _ex1Service.GradientDescent(feature, 0.01, thInit, 1000);
+    ctx.body = theta.dataSync();
   }
 
   // 显示点阵图和估值图
@@ -36,7 +37,8 @@ class ex1Controller {
     const data = ReadData("./data/ex1data/ex1data1.txt");
     let feature = tf.tensor(data);
     let thInit = tf.tensor([[0], [0]]);
-    let curveValue = _ex1Service.LearningCurve(feature, 0.01, thInit, 1000);
+    let curveValue =await _ex1Service.LearningCurve(feature, 0.01, thInit, 1000);
+    console.log(curveValue)
     ctx.body = curveValue;
   }
 
@@ -53,10 +55,9 @@ class ex1Controller {
     let curveValue: Array<any> = [];
     for (let i = 0; i < alpha.length; i++) {
       curveValue.push(
-        _ex1Service.LearningCurve(feature, alpha[i], thInit, 2000)
+        await _ex1Service.LearningCurve(feature, alpha[i], thInit, 2000)
       );
     }
-
     ctx.body = curveValue;
   }
 }

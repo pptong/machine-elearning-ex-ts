@@ -1,8 +1,6 @@
-export default function get(path:string)
-{
-    let xhr = new XMLHttpRequest()
-    xhr.open("GET", path, false); 
-    xhr.overrideMimeType("text/html;charset=utf-8")
-    xhr.send(null)
-    return xhr.responseText
+export default function get(path: string) {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://127.0.0.1:3001/" + path, false);
+  xhr.send(null);
+  return xhr.responseText;
 }
