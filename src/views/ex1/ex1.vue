@@ -18,10 +18,10 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { onMounted, onUnmounted } from "vue";
-import { J, H, T, computeCost, learningCurve } from './ex1'
 import * as tf from "@tensorflow/tfjs";
-import { ReadData } from '@/utils/readData'
+import Get from '@/utils/get'
 import MyCharts from '@/utils/myEcharts'
+
 
 export default defineComponent({
   name: 'ex1',
@@ -33,56 +33,44 @@ export default defineComponent({
 
     // 显示θ=[0,0]的时候误差值
     const showRange = () => {
-      const feature = tf.tensor(data1);
-      const initTheta = tf.tensor([[0], [0]]);
-      const rang = J(feature, initTheta);
-      output.rang = rang[0];
+      let data = Get('ex1/data1_showCost')
+      output.rang = Number(data);
     }
 
     // 显示数据点阵图
     const showScatter = () => {
+      let data = Get('ex1/data1_showData')
       var myCharts = new MyCharts('scatterContainer', 0, 30, -6, 30);
-      myCharts.writeScatter(data1);
+      myCharts.writeScatter(data);
     }
 
     // 显示点阵图和估值图
     const showScatterAndLine = () => {
-      var myCharts = new MyCharts('scatterAndLineContainer', 0, 30, -6, 30);
-      let feature = tf.tensor(data1);
-      let thInit = tf.tensor([[0], [0]]);
-      let theta = computeCost(feature, 0.01, thInit, 1000);
-      myCharts.writeScatter(data1);
-      myCharts.writeLine(0, H(tf.tensor([[0]]), theta), 26, H(tf.tensor([[26]]), theta))
+      let data = Get('ex1/data1_showScatterAndLine')
+      var myCharts = new MyCharts('showScatterAndLineContainer', 0, 30, -6, 30);
+      myCharts.writeLine(0, data[0], 26, Number(data[0]) + 26 * Number(data[0]))
     }
 
 
     // 显示点阵图和估值图
     const showLearningCurve = () => {
+      let data = Get('ex1/data1_showLearningCurve')
       var myCharts = new MyCharts('learningCurveContainer', 0, 30, 4, 7);
-      let feature = tf.tensor(data1);
-      let thInit = tf.tensor([[0], [0]]);
-      let curveValue = learningCurve(feature, 0.01, thInit, 1000);
-      myCharts.writeCustomLine(curveValue);
+      const curveData = JSON.parse(data)
+      myCharts.writeCustomLine(curveData);
     }
 
 
-    const showLearningCurveByEveryAlpha =()=> {
+    const showLearningCurveByEveryAlpha = () => {
+      let data = Get('ex1/data2_showLearningCurveByEveryAlpha')
       var myCharts = new MyCharts('learningCurveByEveryAlphaContainer', 0, 2000, 0, 0.5);
-      let alpha = [0.001, 0.003, 0.1, 0.3]
-      let thInit = tf.tensor([[0], [0], [0]]);
-      let feature = tf.tensor(data2);
-      feature = feature.sub(feature.mean(0, true)).div(tf.moments(feature, 0, true).variance.sqrt());
-      for (let i = 0; i < alpha.length; i++) {
-        let curveValue = learningCurve(feature, alpha[i], thInit, 2000);
-        myCharts.writeCustomLine(curveValue);
+      const curveData = JSON.parse(data)
+      for (let i = 0; i < curveData.length; i++) {
+        myCharts.writeCustomLine(curveData[i]);
       }
-
     }
 
-    onMounted(() => {
-      data1 = ReadData('ex1data/ex1data1.txt');
-      data2 = ReadData('ex1data/ex1data2.txt');
-    });
+
 
     return {
       output, showRange, showScatter, showScatterAndLine, showLearningCurve, showLearningCurveByEveryAlpha

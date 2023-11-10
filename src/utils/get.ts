@@ -1,4 +1,4 @@
-export default function Open(path:string)
+export default function get(path:string)
 {
     let xhr = new XMLHttpRequest()
     xhr.open("GET", path, false); 

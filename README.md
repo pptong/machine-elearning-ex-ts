@@ -5,9 +5,9 @@
 本人环境用的是Node版本是v20.0.0，因为考虑到练习中需要呈现一些图标因此使用Vue3来进行呈现。具体编译环境和开发环境的搭建就不说了。除了准备好环境外还需要安装必须用到的依赖：
 
 ```sh
-npm install @tensorflow/tfjs //包含标量、向量、矩阵计算库
-npm install seedrandom //tensorflow 需要用到这个库
-npm install echarts //显示各类图标使用
+npm install @tensorflow/tfjs 
+npm install seedrandom 
+npm install echarts 
 ```
 
 ### 安装依赖
