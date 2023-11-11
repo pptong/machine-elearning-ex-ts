@@ -1,11 +1,15 @@
 <template>
   <div class="ex2">
     <div>ex1 - logical regression </div>
-    <div>3.1 - data scatter <button @click="showScatter">show</button> </div>
+    <div>1.1 - data scatter <button @click="showScatter">show</button> </div>
     <div id="scatterContainer" class="chartcontainer"></div>
-    <div>3.2 - θ=[0,0,0],J(θ) = {{ output.cost }} <button @click="showCost">show</button> </div>
-    <div>3.3 - data scatter <button @click="showScatterAndLine">show</button> </div>
+    <div>1.2 - θ=[0,0,0],J(θ) = {{ output.cost }} <button @click="showCost">show</button> </div>
+    <div>1.3 - data scatter <button @click="showScatterAndLine">show</button> </div>
     <div id="scatterAndLineContainer" class="chartcontainer"></div>
+
+    <div>2.1 - data scatter <button @click="showScatter2">show</button> </div>
+    <div id="scatterContainer2" class="chartcontainer"></div>
+
   </div>
 </template>
 
@@ -36,6 +40,16 @@ export default defineComponent({
       myCharts.writeScatter(dataJson.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
     }
 
+
+    const showScatter2 = () => {
+      var myCharts = new MyCharts('scatterContainer2', -1.2, 1.2, -1.2, 1.2);
+      let data = Get('ex2/data2_showData')
+      const dataJson: Array<Array<number>> = JSON.parse(data);
+
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 1).map(x => [x[0], x[1]]));
+      myCharts.writeScatter(dataJson.filter(x => x[2] == 0).map(x => [x[0], x[1]]));
+    }
+
     const showCost = () => {
       let data = Get('ex2/data1_costValue')
       output.cost = JSON.parse(data)[0]
@@ -57,7 +71,7 @@ export default defineComponent({
 
 
     return {
-      showScatter, showCost, output, showScatterAndLine
+      showScatter, showCost, output, showScatterAndLine,showScatter2
     }
 
   }
