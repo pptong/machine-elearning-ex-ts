@@ -27,5 +27,14 @@ export const ex2Routers: RouterItem[] = [
     method: "get",
     action: ex2Controller.data2_GradientDescent_Lambda1,
   },
-  
+  {
+    path: "/ex2/data2_GradientDescent_Lambda0",
+    method: "get",
+    action: ex2Controller.data2_GradientDescent_Lambda0,
+  },
+  {
+    path: "/ex2/data2_GradientDescent_Lambda100",
+    method: "get",
+    action: ex2Controller.data2_GradientDescent_Lambda100,
+  },
 ];

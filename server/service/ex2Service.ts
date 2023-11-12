@@ -40,22 +40,36 @@ export default class ex2Service {
   ) {
     const h = await this.Hypothesis(feature, theta);
 
+
+
     const ones = tf.ones([feature.shape[0], 1]);
     const featureData = tf.concat([ones, feature], 1);
-    const sumValue = h
+
+
+    let sumData = h
       .transpose()
       .sub(y)
       .mul(featureData)
-      .sum(0, true)
-      .transpose();
-      
-    let descent = sumValue.mul(alpha).div(feature.shape[0]);
+
+    let descent = sumData.sum(0, true)
+      .transpose().div(feature.shape[0])
+
     if (lambda > 0) {
       const thetaProcess = theta.mul(tf.zeros([1, 1]).concat(tf.ones([theta.shape[0] - 1, 1])));
-      const data_Regularization = thetaProcess.mul( lambda / feature.shape[0])
+      const data_Regularization = thetaProcess.mul(lambda / feature.shape[0])
       descent = descent.add(data_Regularization);
     }
-    let data = theta.sub(descent);
+
+    const data = theta.sub(descent.mul(alpha));
+
+    //let descent = sumValue.mul(alpha).div(feature.shape[0]);
+    // if (lambda > 0) {
+    //   const thetaProcess = theta.mul(tf.zeros([1, 1]).concat(tf.ones([theta.shape[0] - 1, 1])));
+    //   const data_Regularization = thetaProcess.mul(lambda / feature.shape[0])
+    //   descent = descent.add(data_Regularization);
+    // }
+
+    //let data = theta.sub(descent);
 
     return data;
   }
@@ -70,14 +84,17 @@ export default class ex2Service {
   // 最终返回不同特征下的值形式为 (1 * m)
   // 具体计算公式为 1/(1-e^(θTX))
   async Hypothesis(feature: tf.Tensor<tf.Rank>, theta: tf.Tensor<tf.Rank>) {
+    return await this.Sigmoid(await this.Polynomial(feature, theta));
+  }
 
 
-
+  async Polynomial(feature: tf.Tensor<tf.Rank>, theta: tf.Tensor<tf.Rank>) {
     const ones = tf.ones([feature.shape[0], 1]);
     const data = tf.concat([ones, feature], 1);
     const powForE = theta.transpose().matMul(data.transpose());
-    return this.Sigmoid(powForE);
+    return powForE;
   }
+
 
   //梯度算法
   async GradientDescent(
@@ -88,7 +105,6 @@ export default class ex2Service {
     iterations: number,
     lambda: number = 0
   ) {
-    let i = 0;
     let rTheta = theta;
     for (let i = 0; i < iterations; i++) {
       rTheta = await this.Gradient(feature, rTheta, yi, alpha, lambda);
