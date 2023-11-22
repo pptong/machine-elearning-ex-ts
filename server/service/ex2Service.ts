@@ -1,4 +1,4 @@
-import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs-node";
 export default class ex2Service {
   // 代价函数
   // theta 为向量 ( m*1 ) , feature 为矩阵 (m * n) , y 为向量
@@ -16,17 +16,10 @@ export default class ex2Service {
     const a1 = yi.mul(-1).mul(h.log()); //-yi*log(h(xi))
     const a2 = ones.sub(yi).mul(ones.sub(h).log()); //(1-yi)*log(1-h(xi))
     let sumData = a1.sub(a2).sum();
+    const data = sumData.div(feature.shape[0]).dataSync();
 
-    if (lambda > 0) {
-      sumData = sumData.add(
-        theta
-          .pow(2)
-          .sum()
-          .mul(lambda / (2 * feature.shape[0]))
-      );
-    }
 
-    return sumData.div(feature.shape[0]).dataSync();
+    return data
   }
 
   // 梯度函数dataSync
@@ -38,10 +31,9 @@ export default class ex2Service {
     alpha: number,
     lambda: number = 0
   ) {
+
+
     const h = await this.Hypothesis(feature, theta);
-
-
-
     const ones = tf.ones([feature.shape[0], 1]);
     const featureData = tf.concat([ones, feature], 1);
 
@@ -58,18 +50,13 @@ export default class ex2Service {
       const thetaProcess = theta.mul(tf.zeros([1, 1]).concat(tf.ones([theta.shape[0] - 1, 1])));
       const data_Regularization = thetaProcess.mul(lambda / feature.shape[0])
       descent = descent.add(data_Regularization);
+
+
     }
 
     const data = theta.sub(descent.mul(alpha));
 
-    //let descent = sumValue.mul(alpha).div(feature.shape[0]);
-    // if (lambda > 0) {
-    //   const thetaProcess = theta.mul(tf.zeros([1, 1]).concat(tf.ones([theta.shape[0] - 1, 1])));
-    //   const data_Regularization = thetaProcess.mul(lambda / feature.shape[0])
-    //   descent = descent.add(data_Regularization);
-    // }
 
-    //let data = theta.sub(descent);
 
     return data;
   }
@@ -77,7 +64,8 @@ export default class ex2Service {
   async Sigmoid(pow: tf.Tensor<tf.Rank>) {
     const e = tf.fill([1, pow.shape[1] || 1], Math.E);
     const ones = tf.ones([1, pow.shape[1] || 1]);
-    return ones.div(ones.add(e.pow(pow.mul(-1))));
+    const data = ones.div(ones.add(e.pow(pow.mul(-1))));
+    return data
   }
 
   // feature 为向量 ( n*1 ) , feature 为矩阵 ((m-1) * n)
@@ -107,6 +95,7 @@ export default class ex2Service {
   ) {
     let rTheta = theta;
     for (let i = 0; i < iterations; i++) {
+      //console.log(i)
       rTheta = await this.Gradient(feature, rTheta, yi, alpha, lambda);
     }
     return rTheta;

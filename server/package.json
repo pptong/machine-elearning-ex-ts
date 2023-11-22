@@ -10,11 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tensorflow/tfjs": "^4.13.0",
+    "@tensorflow/tfjs-node": "^2.8.0",
+    "jimp": "^0.22.10",
     "koa": "^2.14.2",
     "koa-router": "^12.0.1",
+    "mat-for-js": "^1.1.0",
     "nodemon": "^3.0.1",
-    "seedrandom": "^3.0.5",
+    "pako": "^1.0.11",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { Context } from "koa";
 import ex2Service from "../service/ex2Service";
 import ReadData from "../untils/readData";
-import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs-node";
 import Contour from "../untils/contour";
 
 class ex2Controller {

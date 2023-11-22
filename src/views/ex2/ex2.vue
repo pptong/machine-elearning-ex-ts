@@ -20,7 +20,6 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { onMounted, onUnmounted } from "vue";
-import * as tf from "@tensorflow/tfjs";
 import MyCharts from '@/utils/myEcharts'
 import Get from '@/utils/get'
 

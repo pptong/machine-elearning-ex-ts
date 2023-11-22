@@ -1,4 +1,4 @@
-import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs-node";
 export default class ex1Service {
   //代价函数
   //j(θ0,θ1)=(1/2m)*[Σ(i=0 to m)(h(i)-yi)^2]

@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs-node";
 import ReadData from "../untils/readData";
 import ex1Service from "../service/ex1Service";
 
